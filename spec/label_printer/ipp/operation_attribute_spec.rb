@@ -48,7 +48,7 @@ RSpec.describe LabelPrinter::IPP::OperationAttribute, type: :model do
 
     it "uri type should return the correct attributes" do
       uri_type = LabelPrinter::IPP::UriType.new("http://forest:631/pinetree")
-      expect(uri_type.value_tag).to eq("0x000B")
+      expect(uri_type.value_tag).to eq("0x45")
       expect(uri_type.name).to eq("printer-uri")
       expect(uri_type.value).to eq("http://forest:631/pinetree")
     end
