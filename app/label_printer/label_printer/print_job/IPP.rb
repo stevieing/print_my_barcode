@@ -1,6 +1,5 @@
 module LabelPrinter
   module PrintJob
-
     ##
     # A print job of type IPP (Internet Printing Protocol)
     class IPP < Base
@@ -20,7 +19,6 @@ module LabelPrinter
         response = http.post(printer_uri.path, request_body.to_s, headers)
         response.code == 200
       end
-      
     end
   end
 end
