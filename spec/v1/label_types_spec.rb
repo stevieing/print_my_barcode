@@ -40,7 +40,7 @@ RSpec.describe V1::LabelTypesController, type: :request, helpers: true do |varia
 
   it "should allow creation of a new label type" do
     expect {
-      post v1_label_types_path, params: {data: {attributes: attributes_for(:label_type)}}.to_json, headers: { 'ACCEPT' => "application/vnd.api+json", 'CONTENT_TYPE' => "application/vnd.api+json" }
+      post v1_label_types_path, params: {data: {attributes: attributes_for(:label_type)}}.to_json, headers: json_spec_headers
       }.to change(LabelType, :count).by(1)
     expect(response).to be_success
     expect(response).to have_http_status(:created)
@@ -48,7 +48,7 @@ RSpec.describe V1::LabelTypesController, type: :request, helpers: true do |varia
 
   it "should prevent creation of a new label type with invalid attributes" do
      expect {
-      post v1_label_types_path, params: {data: {attributes: attributes_for(:label_type).except(:name)}}.to_json, headers: { 'ACCEPT' => "application/vnd.api+json", 'CONTENT_TYPE' => "application/vnd.api+json" }
+      post v1_label_types_path, params: {data: {attributes: attributes_for(:label_type).except(:name)}}.to_json, headers: json_spec_headers
       }.to_not change(LabelType, :count)
     expect(response).to have_http_status(:unprocessable_entity)
     expect(ActiveSupport::JSON.decode(response.body)["errors"]).not_to be_empty
@@ -57,14 +57,14 @@ RSpec.describe V1::LabelTypesController, type: :request, helpers: true do |varia
   it "should allow update of existing label type" do
     label_type = create(:label_type)
     new_name = build(:label_type).name
-    patch v1_label_type_path(label_type), params: {data: {attributes: { name: new_name }}}.to_json, headers: { 'ACCEPT' => "application/vnd.api+json", 'CONTENT_TYPE' => "application/vnd.api+json" }
+    patch v1_label_type_path(label_type), params: {data: {attributes: { name: new_name }}}.to_json, headers: json_spec_headers
     expect(response).to be_success
     expect(ActiveSupport::JSON.decode(response.body)["data"]["attributes"]["name"]).to eq(new_name)
   end
 
   it "should prevent update of existing label type with invalid attributes" do
     label_type = create(:label_type)
-    patch v1_label_type_path(label_type), params: {data: {attributes:{ name: nil }}}.to_json, headers: { 'ACCEPT' => "application/vnd.api+json", 'CONTENT_TYPE' => "application/vnd.api+json" }
+    patch v1_label_type_path(label_type), params: {data: {attributes:{ name: nil }}}.to_json, headers: json_spec_headers
     expect(response).to have_http_status(:unprocessable_entity)
 
     json = ActiveSupport::JSON.decode(response.body)
