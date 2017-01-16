@@ -12,11 +12,15 @@ module V1
 
     private
 
+    # TODO: At the moment we have to permit all of the labels attributes
+    # There needs to be a way of whitelisting only the attributes that are needed
+    # for each print job
     def print_job_params
       params.require(:data).require(:attributes)
-            .permit(:printer_name, :label_template_id)
+            .permit(:printer_name, :label_template_id, :labels)
             .tap do |whitelisted|
               whitelisted[:labels] = params[:data][:attributes][:labels]
+              whitelisted.permit!
             end
     end
   end

@@ -1,8 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.3'
-
-gem 'rails-api'
+gem 'rails', '5.0.1'
 
 group :development, :test do
   gem 'factory_girl_rails'

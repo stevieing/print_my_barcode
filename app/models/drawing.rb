@@ -4,7 +4,7 @@
 # Each drawing will have a placeholder id which is unique with
 # respect to its label.
 # Each drawing must have a field name, x origin and y origin
-class Drawing < ActiveRecord::Base
+class Drawing < ApplicationRecord
   include SubclassChecker
 
   before_create :add_placeholder_id

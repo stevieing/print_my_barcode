@@ -22,9 +22,6 @@ module PrintMyBarcode
 
     config.autoload_paths += %W(#{config.root}/lib/validators)
 
-    # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true
-
     # replace fixtures with factory girl
     config.generators do |g|
         g.test_framework :rspec,
@@ -38,6 +35,8 @@ module PrintMyBarcode
     end
 
     config.mailer = config_for(:mailer)
+
+    ActiveSupport.halt_callback_chains_on_return_false = false
 
   end
 end

@@ -30,6 +30,10 @@ module Helpers
       .map { |e| e["detail"] }
   end
 
+  def json_spec_headers
+    {'ACCEPT' => "application/vnd.api+json", 'CONTENT_TYPE' => "application/vnd.api+json"}
+  end
+
 private
 
   def labels_attributes

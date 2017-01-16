@@ -1,4 +1,4 @@
-class Label < ActiveRecord::Base
+class Label < ApplicationRecord
 
   has_many :bitmaps, dependent: :destroy
   has_many :barcodes, dependent: :destroy
