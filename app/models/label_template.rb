@@ -12,6 +12,8 @@ class LabelTemplate < ApplicationRecord
 
   delegate :dummy_labels, to: :label_fields
 
+  validate :update_unless_published, on: :update
+
   ##
   # Returns all of the field names as a hash.
   def field_names
@@ -51,6 +53,14 @@ class LabelTemplate < ApplicationRecord
         dupped.labels << label.dup
       end
       dupped.save
+    end
+  end
+
+  private
+
+  def update_unless_published
+    if published? || published_was
+      errors.add(:base, "A published label template cannot be modified")
     end
   end
 end

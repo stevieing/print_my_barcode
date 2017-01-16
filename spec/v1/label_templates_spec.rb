@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe V1::LabelTemplatesController, type: :request, helpers: true do |variable|
 
-  it "should allow retrieval of all label template" do
+  it "allows retrieval of all label template" do
     label_templates = create_list(:label_template, 5)
     get v1_label_templates_path
     expect(response).to be_success
@@ -23,7 +23,7 @@ RSpec.describe V1::LabelTemplatesController, type: :request, helpers: true do |v
     expect(json["data"][0]["attributes"]["name"]).to eq(label_template.name)
   end
 
-  it "should allow retrieval of information about a particular label template" do
+  it "allows retrieval of information about a particular label template" do
     label_template = create(:label_template)
     get v1_label_template_path(label_template)
     expect(response).to be_success
@@ -40,7 +40,7 @@ RSpec.describe V1::LabelTemplatesController, type: :request, helpers: true do |v
     expect(label["relationships"]["bitmaps"]["data"].length).to eq(label_template.labels.find_by_name(label["attributes"]["name"]).bitmaps.count)
   end
 
-  it "should allow creation of a new label template" do
+  it "allows creation of a new label template" do
     params = label_template_params
     expect {
       post v1_label_templates_path, params: params.to_json, headers: json_spec_headers
@@ -57,7 +57,7 @@ RSpec.describe V1::LabelTemplatesController, type: :request, helpers: true do |v
     expect(label_template.labels.first.bitmaps.count).to eq(params[:data][:attributes][:labels_attributes].first[:bitmaps_attributes].length)
   end
 
-  it "should prevent creation of a new label template with invalid label type" do
+  it "prevents creation of a new label template with invalid label type" do
     expect {
       post v1_label_templates_path, params: {data: {attributes: label_template_params_with_invalid_label_type}}.to_json, headers: json_spec_headers
       }.to_not change(LabelTemplate, :count)
@@ -71,7 +71,7 @@ RSpec.describe V1::LabelTemplatesController, type: :request, helpers: true do |v
     expect(label_type_errors).to include("does not exist")
   end
 
-  it "should prevent creation of a new label template with invalid association" do
+  it "prevents creation of a new label template with invalid association" do
     expect {
       post v1_label_templates_path, params: { data: {attributes: label_template_params_with_invalid_association}}.to_json, headers: json_spec_headers
       }.to_not change(LabelTemplate, :count)
@@ -89,7 +89,7 @@ RSpec.describe V1::LabelTemplatesController, type: :request, helpers: true do |v
 
   end
 
-  it "should allow update of existing label template" do
+  it "allows update of existing label template" do
     label_template = create(:label_template)
     label_type = create(:label_type)
     patch v1_label_template_path(label_template), params: {data: {attributes: { label_type_id: label_type.id }}}.to_json, headers: json_spec_headers
@@ -97,7 +97,7 @@ RSpec.describe V1::LabelTemplatesController, type: :request, helpers: true do |v
     expect(ActiveSupport::JSON.decode(response.body)["data"]["relationships"]["label_type"]["data"]["id"].to_i).to eq(label_type.id)
   end
 
-  it "should prevent update of existing label template with invalid attributes" do
+  it "prevents update of existing label template with invalid attributes" do
     label_template = create(:label_template)
     patch v1_label_template_path(label_template), params: {data: {attributes: { label_type_id: nil }}}.to_json, headers: json_spec_headers
     expect(response).to have_http_status(:unprocessable_entity)
@@ -108,6 +108,17 @@ RSpec.describe V1::LabelTemplatesController, type: :request, helpers: true do |v
 
     label_type_errors = find_attribute_error_details(json, "label_type")
     expect(label_type_errors).to include("does not exist")
+  end
+
+  it "prevents update of existing label templates which are published" do
+    label_template = create(:label_template, published: true)
+    label_type = create(:label_type)
+    patch v1_label_template_path(label_template), params: {data: {attributes: { label_type_id: label_type.id }}}.to_json, headers: json_spec_headers
+    expect(response).to have_http_status(:unprocessable_entity)
+
+    json = ActiveSupport::JSON.decode(response.body)
+
+    expect(json["errors"]).not_to be_empty
   end
 
 end
