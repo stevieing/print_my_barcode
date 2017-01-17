@@ -46,13 +46,11 @@ class LabelTemplate < ApplicationRecord
   # will be changed to "label_template_name copy"
   # dup each of the labels and add it to the new label template
   # Saving the dup will create a whole new record with new ids.
-  def super_dup(new_name = nil)
-    dup.tap do |dupped|
-      dupped.name = new_name || "#{name} copy"
-      labels.each do |label|
-        dupped.labels << label.dup
-      end
-      dupped.save
+  def copy(new_name = nil)
+    dup.tap do |copy|
+      copy.name = new_name || "#{name} copy"
+      copy.labels << labels.collect(&:copy)
+      copy.save
     end
   end
 

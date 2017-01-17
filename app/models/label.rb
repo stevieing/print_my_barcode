@@ -1,5 +1,7 @@
 class Label < ApplicationRecord
 
+  ASSOCIATIONS = [:bitmaps, :barcodes]
+
   has_many :bitmaps, dependent: :destroy
   has_many :barcodes, dependent: :destroy
 
@@ -8,13 +10,14 @@ class Label < ApplicationRecord
   validates :name, presence: true, format: { with: /\A[\w\_]+\z/ }
   validates :name, uniqueness: { scope: :label_template_id },
             if: proc { |l| l.label_template.present? || l.label_template_id.present? }
-  validates_associated :bitmaps, :barcodes
+  validates_associated *ASSOCIATIONS
   
-  accepts_nested_attributes_for :bitmaps, :barcodes
+  accepts_nested_attributes_for *ASSOCIATIONS
 
   ##
   # Each label can have a list of drawings which is
   # all of the barcodes and bitmaps joined together.
+  # TODO: Find a better way to handle grouped associations
   def drawings
     Drawing.where(label: self)
   end
@@ -44,17 +47,13 @@ class Label < ApplicationRecord
   # TODO: shouldn't be overwriting dup, should use initialize_dup
   # but there doesn't seem to be a way to get the
   # object in the right state.
-  def dup
-    super.tap do |dupped|
-      dupped.label_template = nil
-      drawings.each do |drawing|
-        if drawing.barcode?
-          dupped.barcodes << drawing.dup
-        else
-          dupped.bitmaps << drawing.dup
-        end
+  def copy
+    dup.tap do |copy|
+      copy.label_template = nil
+      [*ASSOCIATIONS].each do |drawings|
+        copy.send(drawings) << self.send(drawings).collect(&:dup)
       end
-      dupped.save
+      copy.save
     end
   end
   

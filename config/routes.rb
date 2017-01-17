@@ -3,7 +3,13 @@ Rails.application.routes.draw do
   namespace :v1 do
     resources :sessions, only: [:create, :destroy]
     resources :label_types
-    resources :label_templates
+
+    resources :label_templates do
+      member do
+        post 'copy'
+      end
+    end
+
     resources :printers, only: [:index, :show, :create]
     resources :print_jobs, only: [:create]
 

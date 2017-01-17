@@ -45,7 +45,7 @@ RSpec.describe Label, type: :model do
     expect(build(:label, name: "label1*")).to_not be_valid
   end
 
-  it "should destroy all associated records" do
+  it "destroys all associated records" do
     label = create(:label_with_drawings)
     drawing_ids = label.drawings.pluck(:id)
     label.destroy
@@ -54,16 +54,16 @@ RSpec.describe Label, type: :model do
     end
   end
 
-  it "should dup a label correctly" do
+  it "copies a label correctly" do
     label = create(:label_with_drawings, label_template: create(:label_template))
-    duped_label = label.dup
-    expect(duped_label.name).to eq(label.name)
-    expect(duped_label.label_template).to be_nil
-    expect(duped_label.barcodes.count).to eq(label.barcodes.count)
-    expect(duped_label.bitmaps.count).to eq(label.bitmaps.count)
-    duped_label_drawing_ids = duped_label.drawings.pluck(:id)
+    copied_label = label.copy
+    expect(copied_label.name).to eq(label.name)
+    expect(copied_label.label_template).to be_nil
+    expect(copied_label.barcodes.count).to eq(label.barcodes.count)
+    expect(copied_label.bitmaps.count).to eq(label.bitmaps.count)
+    copied_label_drawing_ids = copied_label.drawings.pluck(:id)
     label.drawings.pluck(:id).each do |id|
-      expect(duped_label_drawing_ids).to_not include(id)
+      expect(copied_label_drawing_ids).to_not include(id)
     end
   end
 

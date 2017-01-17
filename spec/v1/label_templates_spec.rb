@@ -121,4 +121,22 @@ RSpec.describe V1::LabelTemplatesController, type: :request, helpers: true do |v
     expect(json["errors"]).not_to be_empty
   end
 
+  it "allows copying of existing label templates" do
+    label_template = create(:label_template, published: true)
+    post copy_v1_label_template_path(label_template), params: {data: { attributes: { name: "My Shiny New Label Template"}}}.to_json, headers: json_spec_headers
+    expect(response).to be_success
+    expect(response).to have_http_status(:created)
+    json = ActiveSupport::JSON.decode(response.body)["data"]["attributes"]
+    expect(json["id"]).to_not eq(label_template.id)
+    expect(json["name"]).to eq("My Shiny New Label Template")
+
+    label_template = create(:label_template, published: true)
+    post copy_v1_label_template_path(label_template), params: {data: { attributes: { }}}.to_json, headers: json_spec_headers
+    expect(response).to be_success
+    expect(response).to have_http_status(:created)
+    json = ActiveSupport::JSON.decode(response.body)["data"]["attributes"]
+    expect(json["id"]).to_not eq(label_template.id)
+    expect(json["name"]).to eq("#{label_template.name} copy")
+  end
+
 end

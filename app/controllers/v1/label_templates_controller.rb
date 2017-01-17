@@ -29,6 +29,12 @@ module V1
       end
     end
 
+    def copy
+      label_template = current_resource
+      copy = label_template.copy(label_template_params[:name])
+      render json: copy, status: :created
+    end
+
     private
 
     def current_resource
@@ -36,8 +42,12 @@ module V1
     end
 
     def label_template_params
-      params.require(:data).require(:attributes)
-            .permit(LabelTemplate.permitted_attributes)
+      begin
+        params.require(:data).require(:attributes)
+              .permit(LabelTemplate.permitted_attributes)
+      rescue ActionController::ParameterMissing
+        {}
+      end
     end
 
     def filter_parameters

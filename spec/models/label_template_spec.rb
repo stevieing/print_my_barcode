@@ -94,18 +94,18 @@ RSpec.describe LabelTemplate, type: :model, helpers: true do
     end
   end
 
-  it "#dup" do
+  it "#copy" do
     label_template = create(:label_template)
-    label_template_dup = label_template.super_dup
-    expect(label_template_dup.name).to eq("#{label_template.name} copy")
-    expect(label_template_dup.label_type).to eq(label_template.label_type)
-    expect(label_template_dup.labels.count).to eq(label_template.labels.count)
-    label_template_dup_label_ids = label_template_dup.labels.pluck(:id)
+    label_template_copy = label_template.copy
+    expect(label_template_copy.name).to eq("#{label_template.name} copy")
+    expect(label_template_copy.label_type).to eq(label_template.label_type)
+    expect(label_template_copy.labels.count).to eq(label_template.labels.count)
+    label_template_copy_ids = label_template_copy.labels.pluck(:id)
     label_template.labels.pluck(:id).each do |id|
-      expect(label_template_dup_label_ids).to_not include(id)
+      expect(label_template_copy_ids).to_not include(id)
     end
-    label_template_dup = label_template.super_dup("A new label template")
-    expect(label_template_dup.name).to eq("A new label template")
+    label_template_copy = label_template.copy("A new label template")
+    expect(label_template_copy.name).to eq("A new label template")
   end
 
   it "will not modify attributes if the template is published" do
