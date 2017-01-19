@@ -41,6 +41,16 @@ class LabelTemplate < ApplicationRecord
   end
 
   ##
+  # Returns a valid name for a template.
+  # If the passed name is not valid or there is no passed name
+  # Will create a name with copy on the end.
+  def self.valid_name(label_template, name = nil)
+    new_name = name || label_template.name
+    return new_name unless exists?(name: new_name)
+    valid_name(label_template, "#{new_name} copy")
+  end
+
+  ##
   # An implementation of dup which allows the name to be changed.
   # Dup the original template. If a name is not passed the name 
   # will be changed to "label_template_name copy"
@@ -48,11 +58,14 @@ class LabelTemplate < ApplicationRecord
   # Saving the dup will create a whole new record with new ids.
   def copy(new_name = nil)
     dup.tap do |copy|
-      copy.name = new_name || "#{name} copy"
+      copy.name = LabelTemplate.valid_name(copy, new_name)
+      copy.published = false
       copy.labels << labels.collect(&:copy)
       copy.save
     end
   end
+
+  
 
   private
 

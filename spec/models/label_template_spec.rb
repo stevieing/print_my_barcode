@@ -106,21 +106,33 @@ RSpec.describe LabelTemplate, type: :model, helpers: true do
     end
     label_template_copy = label_template.copy("A new label template")
     expect(label_template_copy.name).to eq("A new label template")
+
+    label_template = create(:published_label_template)
+    label_template_copy = label_template.copy
+    expect(label_template_copy).to_not be_published
   end
 
-  it "will not modify attributes if the template is published" do
-    label_template = create(:label_template, published: true)
+  it "prevents modification of attributes if the template is published" do
+    label_template = create(:published_label_template)
     expect(label_template).to be_published
     name = label_template.name
     expect(label_template.update_attributes(name: "Published label template")).to be_falsey
     expect(label_template.reload.name).to eq(name)
   end
 
-   it "will not allow template to be unpublished" do
-    label_template = create(:label_template, published: true)
+  it "prevents unpublishing of a template that is already published" do
+    label_template = create(:published_label_template)
     expect(label_template.update_attributes(published: false)).to be_falsey
     expect(label_template.reload).to be_published
   end
 
-  
+  it "selects a valid template name" do
+    label_template = create(:label_template)
+    expect(LabelTemplate.valid_name(label_template, label_template.name)).to eq("#{label_template.name} copy")
+    expect(LabelTemplate.valid_name(label_template)).to eq("#{label_template.name} copy")
+
+    label_template_copy = create(:label_template, name: "#{label_template.name} copy")
+    expect(expect(LabelTemplate.valid_name(label_template_copy)).to eq("#{label_template_copy.name} copy"))
+  end
+
 end

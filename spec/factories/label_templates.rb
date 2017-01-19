@@ -8,6 +8,10 @@ FactoryGirl.define do
         FactoryGirl.create(:label_with_drawings, name: "footer")
       ].flatten 
     }
+
+    factory :published_label_template do
+      published true
+    end
   end
 
 end
