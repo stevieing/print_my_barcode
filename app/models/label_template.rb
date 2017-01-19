@@ -12,7 +12,8 @@ class LabelTemplate < ApplicationRecord
 
   delegate :dummy_labels, to: :label_fields
 
-  validate :update_unless_published, on: :update
+  before_update :modifiable?
+  before_destroy :modifiable?
 
   ##
   # Returns all of the field names as a hash.
@@ -65,13 +66,12 @@ class LabelTemplate < ApplicationRecord
     end
   end
 
-  
-
   private
 
-  def update_unless_published
+  def modifiable?
     if published? || published_was
       errors.add(:base, "A published label template cannot be modified")
+      throw :abort
     end
   end
 end

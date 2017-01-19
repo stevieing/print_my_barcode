@@ -29,6 +29,16 @@ module V1
       end
     end
 
+    def destroy
+      label_template = current_resource
+      begin
+        label_template.destroy!
+        render json: label_template
+      rescue ActiveRecord::RecordNotDestroyed
+        render_error label_template
+      end
+    end
+
     def copy
       label_template = current_resource
       copy = label_template.copy(label_template_params[:name])

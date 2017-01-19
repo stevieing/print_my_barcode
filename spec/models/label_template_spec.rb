@@ -117,7 +117,16 @@ RSpec.describe LabelTemplate, type: :model, helpers: true do
     expect(label_template).to be_published
     name = label_template.name
     expect(label_template.update_attributes(name: "Published label template")).to be_falsey
+    expect(label_template.errors).to_not be_empty
     expect(label_template.reload.name).to eq(name)
+  end
+
+  it "prevents destruction of templates that are published" do
+    label_template = create(:label_template)
+    expect(label_template.destroy).to be_truthy
+
+    label_template = create(:published_label_template)
+    expect(label_template.destroy).to be_falsey
   end
 
   it "prevents unpublishing of a template that is already published" do

@@ -111,9 +111,23 @@ RSpec.describe V1::LabelTemplatesController, type: :request, helpers: true do |v
   end
 
   it "prevents update of existing label templates which are published" do
-    label_template = create(:label_template, published: true)
+    label_template = create(:published_label_template)
     label_type = create(:label_type)
     patch v1_label_template_path(label_template), params: {data: {attributes: { label_type_id: label_type.id }}}.to_json, headers: json_spec_headers
+    expect(response).to have_http_status(:unprocessable_entity)
+
+    json = ActiveSupport::JSON.decode(response.body)
+
+    expect(json["errors"]).not_to be_empty
+  end
+
+  it "prevents destruction of existing label templates which are published" do
+    label_template = create(:label_template)
+    delete v1_label_template_path(label_template), headers: json_spec_headers
+    expect(response).to be_success
+
+    label_template = create(:published_label_template)
+    delete v1_label_template_path(label_template), headers: json_spec_headers
     expect(response).to have_http_status(:unprocessable_entity)
 
     json = ActiveSupport::JSON.decode(response.body)
@@ -136,7 +150,7 @@ RSpec.describe V1::LabelTemplatesController, type: :request, helpers: true do |v
     expect(response).to have_http_status(:created)
     json = ActiveSupport::JSON.decode(response.body)["data"]["attributes"]
     expect(json["id"]).to_not eq(label_template.id)
-    expect(json["name"]).to eq("#{label_template.name} copy")
+    expect(json["name"]).to_not eq(label_template.name)
   end
 
 end
