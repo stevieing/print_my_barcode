@@ -131,6 +131,10 @@ describe 'Label Templates API', helpers: :true do
         let(:label_template) { label_template_params }
         run_test!
       end
+
+      response '422', 'name can\'t be blank' do
+        let(:label_template) { { data: { attributes: label_template_params_with_invalid_name } } }
+      end
     end
 
    

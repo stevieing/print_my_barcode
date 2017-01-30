@@ -14,6 +14,14 @@ module Helpers
       }}})
   end
 
+  def label_template_params_with_invalid_name
+    ActionController::Parameters.new(
+        name: nil,
+        label_type_id: create(:label_type).id,
+        labels_attributes: labels_attributes
+      )
+  end
+
   def label_template_params_with_invalid_label_type
     ActionController::Parameters.new(
         name: build(:label_template).name,
