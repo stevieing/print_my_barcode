@@ -192,6 +192,9 @@
         "responses": {
           "201": {
             "description": "label template created"
+          },
+          "422": {
+            "description": "name can't be blank"
           }
         }
       }
