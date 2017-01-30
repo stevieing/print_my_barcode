@@ -37,8 +37,13 @@ class LabelTemplate < ApplicationRecord
     [
       'name',
       'label_type_id',
+      'published',
       'labels_attributes' => Label.permitted_attributes
     ]
+  end
+
+  def self.published?(id)
+    LabelTemplate.find(id).published?
   end
 
   ##
@@ -69,7 +74,7 @@ class LabelTemplate < ApplicationRecord
   private
 
   def modifiable?
-    if published? || published_was
+    if LabelTemplate.published?(id)
       errors.add(:base, "A published label template cannot be modified")
       throw :abort
     end

@@ -34,11 +34,15 @@ gem 'rubocop', require: false
 
 gem 'rails-perftest'
 
+gem 'rswag'
+gem 'swagger-ui_rails'
+gem 'sprockets-rails'
+
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
-group :development do
-  gem 'raml_ruby', '~> 0.1.1'
-end
+# group :development do
+#   gem 'raml_ruby', '~> 0.1.1'
+# end
 
 group :deployment do
   gem 'mysql2'

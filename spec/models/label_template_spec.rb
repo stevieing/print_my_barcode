@@ -57,6 +57,14 @@ RSpec.describe LabelTemplate, type: :model, helpers: true do
       expect(permitted[:labels_attributes]).not_to be_nil
     end
 
+    it "name" do
+      expect(permitted[:name]).not_to be_nil
+    end
+
+    it "published" do
+      expect(permitted[:published]).not_to be_nil
+    end
+
     it "bitmap attributes should be permitted" do
       expect(permitted[:labels_attributes].first[:barcodes_attributes]).not_to be_nil
 
@@ -119,6 +127,12 @@ RSpec.describe LabelTemplate, type: :model, helpers: true do
     expect(label_template.update_attributes(name: "Published label template")).to be_falsey
     expect(label_template.errors).to_not be_empty
     expect(label_template.reload.name).to eq(name)
+  end
+
+  it "allows a template to be published" do
+    label_template = create(:label_template)
+    expect(label_template.update_attributes(published: true)).to be_truthy
+    expect(label_template.reload).to be_published
   end
 
   it "prevents destruction of templates that are published" do

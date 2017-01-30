@@ -30,6 +30,7 @@ RSpec.describe V1::LabelTemplatesController, type: :request, helpers: true do |v
     json = ActiveSupport::JSON.decode(response.body)
     json_attributes = json["data"]["attributes"]
     expect(json_attributes["name"]).to eq(label_template.name)
+    expect(json_attributes["published"]).to eq(label_template.published)
 
     json_label_type = json["included"].detect {|lt| lt["type"] == "label_types" }
     expect(json_label_type["attributes"]).to include(label_template.label_type.as_json.except("id"))

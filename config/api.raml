@@ -24,7 +24,7 @@ version: <%= Deployed::VERSION_ID %>
                 },
                 "attributes": {
                   "name":{
-                    "description": "The unique name name of the label type",
+                    "description": "The unique name of the label type",
                     "required": true,
                     "type": "string",
                     "example": "Plate"
@@ -430,6 +430,12 @@ version: <%= Deployed::VERSION_ID %>
                     "required": true,
                     "type": "string",
                     "example": 1
+                  },
+                  "published": {
+                    "description": A published label template is one which cannot be modified,
+                    "required": false,
+                    "type": boolean,
+                    "default": false
                   },
                   "labels_attributes": {
                     "description": "List of labels for the label template. Each label will consist of a name, an array of bitmaps and an array of barcodes.",
@@ -859,6 +865,17 @@ version: <%= Deployed::VERSION_ID %>
                   "labels":["is invalid"]
                 }
               }
+  /{id}:
+    get:
+      description: Return a label template with id.
+    patch:
+      description: Complete a partial update.
+    put:
+      description: Complete a full update. 
+    delete:
+      description: Delete an existing label template.
+    /copy:
+      description: Returns a new template which is a copy of the original with a new name. If no name is supplied the original name is used with copy on the end. Published is set to false. Attributes can be blank.
 /print_jobs:
   post:
     description: Print a label to a named printer and selected label template

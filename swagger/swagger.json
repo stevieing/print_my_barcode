@@ -1,0 +1,483 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API V1",
+    "version": "v1"
+  },
+  "paths": {
+    "/v1/label_templates": {
+      "get": {
+        "summary": "Fetches Label Templates by Name",
+        "tags": [
+          "LabelTemplates"
+        ],
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Label Template found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string",
+                        "default": "label Templates"
+                      },
+                      "attributes": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter[name]",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "/v1/label_types": {
+      "get": {
+        "summary": "Fetches Label Types by name",
+        "tags": [
+          "LabelTypes"
+        ],
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Label Type found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string",
+                        "default": "label types"
+                      },
+                      "attributes": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter[name]",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Creates a Label Type",
+        "tags": [
+          "LabelTypes"
+        ],
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "parameters": [
+          {
+            "name": "label_type",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "default": "label_types"
+                    },
+                    "attributes": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "feed_value": {
+                          "type": "string"
+                        },
+                        "fine_adjustment": {
+                          "type": "string"
+                        },
+                        "pitch_length": {
+                          "type": "string"
+                        },
+                        "print_width": {
+                          "type": "string"
+                        },
+                        "print_length": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "feed_value",
+                        "fine_adjustment",
+                        "pitch_length",
+                        "print_width",
+                        "print_length"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "label type created"
+          },
+          "422": {
+            "description": "print length can't be blank"
+          }
+        }
+      }
+    },
+    "/v1/label_types/{id}": {
+      "get": {
+        "summary": "Retrieves a Label Type",
+        "tags": [
+          "LabelTypes"
+        ],
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "label type found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string",
+                      "default": "label_types"
+                    },
+                    "attributes": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "feed_value": {
+                          "type": "string"
+                        },
+                        "fine_adjustment": {
+                          "type": "string"
+                        },
+                        "pitch_length": {
+                          "type": "string"
+                        },
+                        "print_width": {
+                          "type": "string"
+                        },
+                        "print_length": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/print_jobs": {
+      "post": {
+        "summary": "Creates a Print Job",
+        "tags": [
+          "PrintJobs"
+        ],
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "parameters": [
+          {
+            "name": "print_job",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "default": "print_job"
+                    },
+                    "attributes": {
+                      "type": "object",
+                      "properties": {
+                        "printer_name": {
+                          "type": "string"
+                        },
+                        "label_template_id": {
+                          "type": "integer"
+                        },
+                        "labels": {
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "printer_name",
+                        "label_template_id",
+                        "labels"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "print job created"
+          },
+          "422": {
+            "description": "labels are empty"
+          }
+        }
+      }
+    },
+    "/v1/printers": {
+      "get": {
+        "summary": "Fetches Printers by name",
+        "tags": [
+          "Printers"
+        ],
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "responses": {
+          "200": {
+            "description": "printer found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string",
+                        "default": "printers"
+                      },
+                      "attributes": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "protocol": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter[name]",
+            "in": "query",
+            "type": "string"
+          }
+        ]
+      },
+      "post": {
+        "summary": "Creates a printer",
+        "tags": [
+          "Printers"
+        ],
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "parameters": [
+          {
+            "name": "printer",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "default": "printers"
+                    },
+                    "attributes": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "protocol": {
+                          "type": "string",
+                          "default": "LPD"
+                        }
+                      },
+                      "required": [
+                        "name"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "printer created"
+          },
+          "422": {
+            "description": "name can't be blank"
+          }
+        }
+      }
+    },
+    "/v1/printers/{id}": {
+      "get": {
+        "summary": "Retrieves a printer",
+        "tags": [
+          "Printers"
+        ],
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "printer found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string",
+                      "default": "printers"
+                    },
+                    "attributes": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "protocol": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

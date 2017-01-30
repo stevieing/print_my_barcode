@@ -1,6 +1,6 @@
 class LabelTemplateSerializer < ActiveModel::Serializer
 
-  attributes :id, :name
+  attributes :id, :name, :published
 
   has_one :label_type
 
