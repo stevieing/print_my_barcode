@@ -240,6 +240,56 @@
             }
           }
         }
+      },
+      "patch": {
+        "summary": "Updates a Label Template",
+        "tags": [
+          "LabelTemplates"
+        ],
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "label template updated"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes a Label Template",
+        "tags": [
+          "LabelTemplates"
+        ],
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "label template deleted"
+          }
+        }
       }
     },
     "/v1/label_types": {

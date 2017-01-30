@@ -124,8 +124,11 @@ describe 'Label Templates API', helpers: :true do
         run_test!
       end
     end
+
+   
   end
 
+  #TODO: add correct attributes
   path '/v1/label_templates/{id}' do
 
     get 'Retrieves a Label Template' do
@@ -156,7 +159,43 @@ describe 'Label Templates API', helpers: :true do
         let(:id) { create(:label_template).id }
 
         run_test!
+
       end
     end
+
+    patch 'Updates a Label Template' do
+      tags 'LabelTemplates'
+      consumes 'application/vnd.api+json'
+      produces 'application/vnd.api+json'
+
+      parameter name: :id, in: :path, type: :integer
+
+      response '200', 'label template updated' do
+
+        let(:id) { create(:label_template).id }
+        let(:label_type) { create(:label_type)}
+        let(:label_template) { { data: { attributes: { label_type_id: label_type.id }}}}
+
+        run_test!
+
+      end
+    end
+
+    delete 'Deletes a Label Template' do
+      tags 'LabelTemplates'
+      consumes 'application/vnd.api+json'
+      produces 'application/vnd.api+json'
+
+      parameter name: :id, in: :path, type: :integer
+
+      response '200', 'label template deleted' do
+
+        let(:id) { create(:label_template).id }
+
+        run_test!
+
+      end
+    end
+
   end
 end
