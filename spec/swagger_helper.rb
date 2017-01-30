@@ -22,4 +22,5 @@ RSpec.configure do |config|
       paths: {}
     }
   }
+
 end

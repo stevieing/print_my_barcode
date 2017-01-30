@@ -1,6 +1,6 @@
 require "swagger_helper"
 
-describe 'Label Templates API' do
+describe 'Label Templates API', helpers: :true do
 
   path '/v1/label_templates' do
 
@@ -55,6 +55,107 @@ describe 'Label Templates API' do
           expect(json["data"][0]["id"]).to eq(label_templates.first.id.to_s)
           expect(json["data"][0]["attributes"]["name"]).to eq(label_templates.first.name)
         end
+      end
+    end
+
+    post 'Creates a Label Template' do
+      tags 'LabelTemplates'
+      consumes 'application/vnd.api+json'
+      produces 'application/vnd.api+json'
+
+      parameter name: :label_template, in: :body, schema: {
+        type: :object,
+        properties: {
+          data: {
+            type: :object,
+            properties: {
+              type: { type: :string, default: "label_templates"},
+              attributes: {
+                type: :object,
+                properties: {
+                  name: { type: :string },
+                  label_type_id: { type: :string },
+                  labels_attributes: { 
+                    type: :array,
+                    properties: {
+                      name: { type: :string },
+                      bitmaps_attributes: {
+                        type: :array,
+                        properties: {
+                          field_name: { type: :string},
+                          x_origin: { type: :string },
+                          y_origin: { type: :string },
+                          horizontal_magnification: { type: :string },
+                          vertical_magnification: { type: :string },
+                          font: { type: :string },
+                          space_adjustment: { type: :string },
+                          rotational_angles: { type: :string }
+                        }
+                      },
+                      barcodes_attributes: {
+                        type: :array,
+                        properties: {
+                          field_name: { type: :string},
+                          x_origin: { type: :string },
+                          y_origin: { type: :string },
+                          barcode_type: { type: :string },
+                          type_of_check_digit: { type: :string },
+                          one_module_width: { type: :string },
+                          one_cell_width: { type: :string },
+                          rotational_angle: { type: :string },
+                          height: { type: :string },
+                          no_of_columns: { type: :string },
+                          bar_heigth: { type: :string }
+                        }
+
+                      }
+                    } 
+                  },
+                },
+                required: ['name', 'label_type_id', 'labels_attributes']
+              }
+            }
+          }
+        }
+      }
+
+      response '201', 'label template created' do
+        let(:label_template) { label_template_params }
+        run_test!
+      end
+    end
+  end
+
+  path '/v1/label_templates/{id}' do
+
+    get 'Retrieves a Label Template' do
+      tags 'LabelTemplates'
+      consumes 'application/vnd.api+json'
+      produces 'application/vnd.api+json'
+
+      parameter name: :id, in: :path, type: :integer
+
+      response '200', 'label template found' do
+        schema type: :object, properties: {
+          data: {
+            type: :object,
+            properties: {
+              id: { type: :string },
+              type: { type: :string, default: "label_templates" },
+              attributes: {
+                type: :object,
+                properties: {
+                  name: { type: :string },
+                  published: { type: :boolean }
+                }
+              }
+            }
+          }
+        }
+
+        let(:id) { create(:label_template).id }
+
+        run_test!
       end
     end
   end
