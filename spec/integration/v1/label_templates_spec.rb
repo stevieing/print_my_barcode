@@ -1,6 +1,39 @@
 require "swagger_helper"
 
-describe 'Label Templates API', helpers: :true do
+describe 'Label Templates API' do
+
+  def labels_attributes
+    [
+      {
+        name: build(:label).name,
+        barcodes_attributes: [ attributes_for(:barcode), attributes_for(:barcode) ],
+        bitmaps_attributes: [ attributes_for(:bitmap), attributes_for(:bitmap) ]
+      },
+      {
+        name: build(:label).name,
+        barcodes_attributes: [ attributes_for(:barcode), attributes_for(:barcode) ],
+        bitmaps_attributes: [ attributes_for(:bitmap), attributes_for(:bitmap) ]
+      }
+    ]
+  end
+
+  def invalid_label_attributes
+    {
+      name: build(:label).name,
+      barcodes_attributes: [ attributes_for(:barcode), attributes_for(:barcode) ],
+      bitmaps_attributes: [ attributes_for(:bitmap).except(:x_origin), attributes_for(:bitmap) ],
+    }
+  end
+
+  def label_template_params
+    label_template = build(:label_template)
+    {
+      name: label_template.name,
+      published: label_template.published,
+      label_type_id: create(:label_type).id,
+      labels_attributes: labels_attributes
+    }
+  end
 
   path '/v1/label_templates' do
 
@@ -128,12 +161,22 @@ describe 'Label Templates API', helpers: :true do
       }
 
       response '201', 'label template created' do
-        let(:label_template) { label_template_params }
+        let(:label_template) { { data: { attributes: label_template_params } } }
         run_test!
       end
 
       response '422', 'name can\'t be blank' do
-        let(:label_template) { { data: { attributes: label_template_params_with_invalid_name } } }
+        let(:label_template) { { data: { attributes: label_template_params.except(:name) } } }
+        run_test!
+      end
+
+      response '422', 'label type does not exist' do
+        let(:label_template) { { data: { attributes: label_template_params.except(:label_type_id) } } }
+        run_test!
+      end
+
+      response '422', 'label is not valid' do
+        let(:label_template) { { data: { attributes: label_template_params.merge(labels_attributes: labels_attributes.push(invalid_label_attributes)) } } }
         run_test!
       end
     end
@@ -210,5 +253,34 @@ describe 'Label Templates API', helpers: :true do
       end
     end
 
+  end
+
+  path '/v1/label_templates/{id}/copy' do
+
+    post 'Copies a label template' do
+      tags 'LabelTemplates'
+      consumes 'application/vnd.api+json'
+      produces 'application/vnd.api+json'
+
+      parameter name: :id, in: :path, type: :integer
+
+      parameter name: :label_template, in: :body, schema: {
+        type: :object,
+        properties: {
+          data: {
+            type: :object,
+            properties: {
+              name: { type: :string}
+            }
+          }
+        }
+      }
+
+      response '201', 'Label Template created' do
+        let(:id) { create(:label_template).id }
+        let(:label_template) { { data: { attributes: { name: build(:label_template).name} } } }
+        run_test!
+      end
+    end
   end
 end

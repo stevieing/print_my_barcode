@@ -194,7 +194,7 @@
             "description": "label template created"
           },
           "422": {
-            "description": "name can't be blank"
+            "description": "label is not valid"
           }
         }
       }
@@ -300,6 +300,50 @@
         "responses": {
           "200": {
             "description": "label template deleted"
+          }
+        }
+      }
+    },
+    "/v1/label_templates/{id}/copy": {
+      "post": {
+        "summary": "Copies a label template",
+        "tags": [
+          "LabelTemplates"
+        ],
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "required": true
+          },
+          {
+            "name": "label_template",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Label Template created"
           }
         }
       }
