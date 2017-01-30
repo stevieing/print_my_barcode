@@ -94,74 +94,83 @@
                         },
                         "labels_attributes": {
                           "type": "array",
-                          "properties": {
-                            "name": {
-                              "type": "string"
-                            },
-                            "bitmaps_attributes": {
-                              "type": "array",
-                              "properties": {
-                                "field_name": {
-                                  "type": "string"
-                                },
-                                "x_origin": {
-                                  "type": "string"
-                                },
-                                "y_origin": {
-                                  "type": "string"
-                                },
-                                "horizontal_magnification": {
-                                  "type": "string"
-                                },
-                                "vertical_magnification": {
-                                  "type": "string"
-                                },
-                                "font": {
-                                  "type": "string"
-                                },
-                                "space_adjustment": {
-                                  "type": "string"
-                                },
-                                "rotational_angles": {
-                                  "type": "string"
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string"
+                              },
+                              "bitmaps_attributes": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "field_name": {
+                                      "type": "string"
+                                    },
+                                    "x_origin": {
+                                      "type": "string"
+                                    },
+                                    "y_origin": {
+                                      "type": "string"
+                                    },
+                                    "horizontal_magnification": {
+                                      "type": "string"
+                                    },
+                                    "vertical_magnification": {
+                                      "type": "string"
+                                    },
+                                    "font": {
+                                      "type": "string"
+                                    },
+                                    "space_adjustment": {
+                                      "type": "string"
+                                    },
+                                    "rotational_angles": {
+                                      "type": "string"
+                                    }
+                                  }
                                 }
-                              }
-                            },
-                            "barcodes_attributes": {
-                              "type": "array",
-                              "properties": {
-                                "field_name": {
-                                  "type": "string"
-                                },
-                                "x_origin": {
-                                  "type": "string"
-                                },
-                                "y_origin": {
-                                  "type": "string"
-                                },
-                                "barcode_type": {
-                                  "type": "string"
-                                },
-                                "type_of_check_digit": {
-                                  "type": "string"
-                                },
-                                "one_module_width": {
-                                  "type": "string"
-                                },
-                                "one_cell_width": {
-                                  "type": "string"
-                                },
-                                "rotational_angle": {
-                                  "type": "string"
-                                },
-                                "height": {
-                                  "type": "string"
-                                },
-                                "no_of_columns": {
-                                  "type": "string"
-                                },
-                                "bar_heigth": {
-                                  "type": "string"
+                              },
+                              "barcodes_attributes": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "field_name": {
+                                      "type": "string"
+                                    },
+                                    "x_origin": {
+                                      "type": "string"
+                                    },
+                                    "y_origin": {
+                                      "type": "string"
+                                    },
+                                    "barcode_type": {
+                                      "type": "string"
+                                    },
+                                    "type_of_check_digit": {
+                                      "type": "string"
+                                    },
+                                    "one_module_width": {
+                                      "type": "string"
+                                    },
+                                    "one_cell_width": {
+                                      "type": "string"
+                                    },
+                                    "rotational_angle": {
+                                      "type": "string"
+                                    },
+                                    "height": {
+                                      "type": "string"
+                                    },
+                                    "no_of_columns": {
+                                      "type": "string"
+                                    },
+                                    "bar_heigth": {
+                                      "type": "string"
+                                    }
+                                  }
                                 }
                               }
                             }
