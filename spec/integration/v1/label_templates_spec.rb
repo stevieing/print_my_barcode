@@ -181,7 +181,6 @@ describe 'Label Templates API' do
       end
     end
 
-   
   end
 
   #TODO: add correct attributes
@@ -207,6 +206,46 @@ describe 'Label Templates API' do
                   name: { type: :string },
                   published: { type: :boolean }
                 }
+              },
+              relationships: {
+                type: :object,
+                properties: {
+                  type: { type: :string, default: "label_type" },
+                  data: {
+                    type: :object,
+                    properties: {
+                      id: { type: :string },
+                      type: { type: :string, default: "label_types" },
+                      attributes: {
+                        type: :object,
+                        properties: {
+                          labels: {
+                            type: :object,
+                            data: {
+                              type: :array,
+                              items: {
+                                type: :object
+                              # }
+                              # items: {
+                              #   type: :object #,
+                                # properties: {
+                                #   id: { type: :string },
+                                #   type: { type: :string, default: "labels"}
+                                # }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              included: {
+                type: :array,
+                items: {
+                  type: :object
+                }
               }
             }
           }
@@ -219,6 +258,7 @@ describe 'Label Templates API' do
       end
     end
 
+    #TODO: fix tests for label template with invalid attributes.
     patch 'Updates a Label Template' do
       tags 'LabelTemplates'
       consumes 'application/vnd.api+json'
@@ -235,6 +275,22 @@ describe 'Label Templates API' do
         run_test!
 
       end
+
+      response '422', 'A published label template cannot be modified' do
+
+        let(:id) { create(:published_label_template).id }
+        let(:label_type) { create(:label_type)}
+        let(:label_template) { { data: { attributes: { label_type_id: label_type.id }}}}
+
+        run_test!
+      end
+
+      # response '422', 'Invalid attributes' do
+      #   let(:id) { create(:label_template).id }
+      #   let(:label_template) { { data: { attributes: { label_type_id: nil }}}}
+
+      #   run_test!
+      # end
     end
 
     delete 'Deletes a Label Template' do
@@ -250,6 +306,13 @@ describe 'Label Templates API' do
 
         run_test!
 
+      end
+
+      response '422', 'A published label template cannot be modified' do
+        
+        let(:id) { create(:published_label_template).id }
+
+        run_test!
       end
     end
 
@@ -270,7 +333,12 @@ describe 'Label Templates API' do
           data: {
             type: :object,
             properties: {
-              name: { type: :string}
+              attributes: {
+                type: :object,
+                properties: {
+                  name: { type: :string}
+                }
+              }
             }
           }
         }
@@ -279,6 +347,12 @@ describe 'Label Templates API' do
       response '201', 'Label Template created' do
         let(:id) { create(:label_template).id }
         let(:label_template) { { data: { attributes: { name: build(:label_template).name} } } }
+        run_test!
+      end
+
+      response '201', 'Label Template created' do
+        let(:id) { create(:label_template).id }
+        let(:label_template) { { data: { attributes: { name: "" } } } }
         run_test!
       end
     end

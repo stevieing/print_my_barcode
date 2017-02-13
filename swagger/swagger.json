@@ -245,6 +245,47 @@
                           "type": "boolean"
                         }
                       }
+                    },
+                    "relationships": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "default": "label_type"
+                        },
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string",
+                              "default": "label_types"
+                            },
+                            "attributes": {
+                              "type": "object",
+                              "properties": {
+                                "labels": {
+                                  "type": "object",
+                                  "data": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "included": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
                     }
                   }
                 }
@@ -275,6 +316,9 @@
         "responses": {
           "200": {
             "description": "label template updated"
+          },
+          "422": {
+            "description": "A published label template cannot be modified"
           }
         }
       },
@@ -300,6 +344,9 @@
         "responses": {
           "200": {
             "description": "label template deleted"
+          },
+          "422": {
+            "description": "A published label template cannot be modified"
           }
         }
       }
@@ -332,8 +379,13 @@
                 "data": {
                   "type": "object",
                   "properties": {
-                    "name": {
-                      "type": "string"
+                    "attributes": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        }
+                      }
                     }
                   }
                 }
